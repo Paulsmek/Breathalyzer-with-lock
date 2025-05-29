@@ -21,6 +21,7 @@ ISR(TIMER0_COMPA_vect) {
     systicks++;
 }
 
+
 /* ========================= Timer1 - Servo PWM (50Hz) ========================= */
 void Timer1_init_servo_pwm(void) {
     TCCR1A = (1 << WGM11) | (1 << COM1A1);                    // Fast PWM, non-inverting

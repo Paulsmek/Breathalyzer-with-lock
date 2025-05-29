@@ -39,9 +39,9 @@ uint16_t alcoholValue = 0;
 
 /* ---------------- LCD I2C low-level ---------------- */
 void TWI_init(void) {
-    TWSR = 0x00;
-    TWBR = 72;
-    TWCR = (1 << TWEN);
+    TWSR = 0x00; // prescalaer
+    TWBR = 72; // clock speed 
+    TWCR = (1 << TWEN); // start/stop/enable
 }
 
 void TWI_start(void) {
@@ -55,7 +55,7 @@ void TWI_stop(void) {
 }
 
 void TWI_write(uint8_t data) {
-    TWDR = data;
+    TWDR = data; // data 
     TWCR = (1 << TWINT) | (1 << TWEN);
     while (!(TWCR & (1 << TWINT)));
 }
@@ -90,10 +90,10 @@ void LCD_init(void) {
     LCD_send_nibble(0x30, 0); _delay_ms(1);
     LCD_send_nibble(0x30, 0); _delay_us(150);
     LCD_send_nibble(0x20, 0); _delay_us(150);
-    LCD_command(0x28);
-    LCD_command(0x0C);
-    LCD_command(0x06);
-    LCD_command(0x01);
+    LCD_command(0x28);  // Function set: 4-bit, 2 lines, 5x8 font
+    LCD_command(0x0C);  // Display ON, Cursor OFF
+    LCD_command(0x06);  // Entry mode set: Increment, no shift
+    LCD_command(0x01);  // Clear display
     _delay_ms(2);
 }
 
@@ -138,9 +138,9 @@ void ADC0_init(void) {
 }
 
 uint16_t ADC0_read(void) {
-    ADMUX = (ADMUX & 0xF0) | SENSOR_PIN;
+    ADMUX = (ADMUX & 0xF0) | SENSOR_PIN; // use AVCC (5V) as reference voltage
     ADCSRA |= (1 << ADSC);
-    while (ADCSRA & (1 << ADSC));
+    while (ADCSRA & (1 << ADSC)); // enables ADC and sets prescaler to 64
     return ADC;
 }
 
